@@ -1,0 +1,52 @@
+
+import 'dart:convert';
+
+import 'package:project_soma/Domain/Entities/Transaction.dart';
+
+class TransactionModel extends TransactionEntity{
+  TransactionModel({
+    required super.id,
+    required super.value,
+    required super.transactionDate,
+    required super.monthYear,
+    required super.categoryId,
+    super.observation,
+    super.isFixed = false,
+    super.isPaid = true,
+    required super.createdAt,
+    required super.updatedAt
+  });
+
+
+  Map<String, dynamic> toMap(){
+    return {
+      'id': id,
+      'value': value,
+      'transactionDate': transactionDate.toIso8601String(),
+      'monthYear': monthYear,
+      'categoryId': categoryId,
+      'observation': observation,
+      'isFixed': isFixed ? 1 : 0,
+      'isPaid': isPaid? 1 : 0,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String()
+    };
+  }
+
+  factory TransactionModel.fromMap(Map<String, dynamic> map){
+    return TransactionModel(
+        id: map['id'],
+        value: map['value'],
+        transactionDate: DateTime.parse(map['transactionDate']),
+        monthYear: map['monthYear'],
+        categoryId: map['categoryId'],
+        observation: map['observation'],
+        isFixed: map['isFixed'] == 1,
+        isPaid: map['isPaid'] == 1,
+        createdAt: DateTime.parse(map['createdAt']),
+        updatedAt: DateTime.parse(map['updatedAt'])
+    );
+  }
+
+  factory TransactionModel.fromJson(String json) => TransactionModel.fromMap(jsonDecode(json));
+}
