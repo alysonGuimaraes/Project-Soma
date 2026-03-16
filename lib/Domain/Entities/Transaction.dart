@@ -4,6 +4,7 @@ class TransactionEntity {
   final double value;
   final DateTime transactionDate;
   final String monthYear;
+  final String? finalMonthYear; // Define o último mês da transacao fixa
   final String categoryId;
   final String? observation;
   final bool isFixed;
@@ -16,6 +17,7 @@ class TransactionEntity {
     required this.value,
     required this.transactionDate,
     required this.monthYear,
+    this.finalMonthYear,
     required this.categoryId,
     this.observation,
     this.isFixed = false,

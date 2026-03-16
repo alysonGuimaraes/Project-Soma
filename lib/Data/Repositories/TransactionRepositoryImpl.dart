@@ -1,13 +1,35 @@
 
 import 'package:project_soma/Data/Models/TransactionModel.dart';
+import 'package:project_soma/Domain/Entities/Transaction.dart';
 import 'package:project_soma/Domain/Repositories/ITransactionRepository.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class TransactionRepositoryImpl extends ITransactionRepository {
+  final Database _database;
+
+  TransactionRepositoryImpl(this._database);
 
   @override
-  Future<void> createTransaction(TransactionModel transaction) {
-    // TODO: implement createTransaction
-    throw UnimplementedError();
+  Future<void> createTransaction(TransactionEntity transaction) async {
+    final model = TransactionModel(
+      id: transaction.id,
+      value: transaction.value,
+      transactionDate: transaction.transactionDate,
+      monthYear: transaction.monthYear,
+      finalMonthYear: transaction.finalMonthYear,
+      categoryId: transaction.categoryId,
+      observation: transaction.observation,
+      isFixed: transaction.isFixed,
+      isPaid: transaction.isPaid,
+      createdAt: transaction.createdAt,
+      updatedAt: transaction.updatedAt,
+    );
+
+    await _database.insert(
+      'Transactions',
+      model.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace
+    );
   }
 
   @override
@@ -17,27 +39,63 @@ class TransactionRepositoryImpl extends ITransactionRepository {
   }
 
   @override
-  Future<List<TransactionModel>> getFixedTransactions() {
-    // TODO: implement getFixedTransactions
-    throw UnimplementedError();
+  Future<List<TransactionEntity>> getFixedTransactions() async {
+    final List<Map<String, dynamic>> maps = await _database.query(
+      'Transactions',
+      where: 'isFixed = ?',
+      whereArgs: [1],
+    );
+
+    return maps.map((map) => TransactionModel.fromMap(map)).toList();
   }
 
   @override
-  Future<TransactionModel?> getTransactionById(String id) {
-    // TODO: implement getTransactionById
-    throw UnimplementedError();
+  Future<TransactionEntity?> getTransactionById(String id) async {
+    final List<Map<String, dynamic>> maps = await _database.query(
+      'Transactions',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return TransactionModel.fromMap(maps.first);
+    }
+    return null;
   }
 
   @override
-  Future<List<TransactionModel>> getTransactionsByMonth(String monthYear) {
-    // TODO: implement getTransactionsByMonth
-    throw UnimplementedError();
+  Future<List<TransactionEntity>> getTransactionsByMonth(String monthYear) async {
+    final List<Map<String, dynamic>> maps = await _database.query(
+      'Transactions',
+      where: 'monthYear = ?',
+      whereArgs: [monthYear],
+      orderBy: 'transactionDate DESC',
+    );
+
+    return maps.map((map) => TransactionModel.fromMap(map)).toList();
   }
 
   @override
-  Future<void> updateTransaction(TransactionModel transaction) {
-    // TODO: implement updateTransaction
-    throw UnimplementedError();
+  Future<void> updateTransaction(TransactionEntity transaction) async {
+    final model = TransactionModel(
+      id: transaction.id,
+      value: transaction.value,
+      transactionDate: transaction.transactionDate,
+      monthYear: transaction.monthYear,
+      categoryId: transaction.categoryId,
+      observation: transaction.observation,
+      isFixed: transaction.isFixed,
+      isPaid: transaction.isPaid,
+      createdAt: transaction.createdAt,
+      updatedAt: DateTime.now(),
+    );
+
+    await _database.update(
+      'Transactions',
+      model.toMap(),
+      where: 'id = ?',
+      whereArgs: [transaction.id],
+    );
   }
 
 }

@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() {
+import 'Data/Database/Database_Service.dart';
+import 'Presentation/Layouts/MainLayout.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final dbService = DatabaseService();
+  await dbService.database;
+
   runApp(const MyApp());
 }
 
@@ -14,10 +23,19 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        colorSchemeSeed: Colors.blueGrey,
       ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('pt', 'BR'),
+        Locale('en', 'US'),
+      ],
       home: const Scaffold(
-        body: Center(child: Text('Bem-vindo ao Soma')),
+        body: MainLayout(),
       ),
     );
   }
