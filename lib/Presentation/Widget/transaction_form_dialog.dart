@@ -170,7 +170,7 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
               final controller = TransactionController(repository);
 
               // 2. Tentar converter o valor introduzido para número (Double)
-              final double value = double.tryParse(_valueController.text.replaceAll(',', '.')) ?? 0.0;
+              final double value = double.tryParse(_moneyValueController.text.replaceAll(',', '.')) ?? 0.0;
 
               // 3. Definir o Mês Final (nulo se for indeterminado)
               final String? finalMonth = _isUndeterminedFixed ? null : _finalMonthYearController.text;
@@ -178,7 +178,7 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
               try {
                 // 4. Chamar o controlador para gravar
                 await controller.saveNewTransaction(
-                  value: _moneyValueController.numberValue,
+                  value: value,
                   categoryId: 'cat_provisoria_01', // Ainda vamos criar o menu de categorias!
                   observation: _observationController.text.isEmpty ? null : _observationController.text,
                   isFixed: _isFixed,
