@@ -26,9 +26,6 @@ jobs:
       - name: Run Tests
         run: flutter test --coverage
 
-      - name: Build
-        run: flutter build windows --release 
-
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@ba3875ecf642b2129de2b589510c81a8b53dbf4e
         env:
