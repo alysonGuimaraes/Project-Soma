@@ -11,7 +11,7 @@ jobs:
     name: SonarQube
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  
 
@@ -30,7 +30,7 @@ jobs:
         run: flutter build windows --release 
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@02c004383307bb539455322967ef928b9d329806
+        uses: SonarSource/sonarcloud-github-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
