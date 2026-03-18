@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../Widget/transaction_form_dialog.dart';
+import '../Widgets/transaction_form_dialog.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});

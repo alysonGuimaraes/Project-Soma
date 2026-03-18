@@ -1,5 +1,5 @@
 
-import '../Entities/Category.dart';
+import '../Entities/category.dart';
 
 abstract class ICategoryRepository {
   Future<List<CategoryEntity>> getAllCategories();

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:intl/intl.dart';
 
-import '../../Data/Database/Database_Service.dart';
-import '../../Data/Repositories/TransactionRepositoryImpl.dart';
-import '../Controllers/TransactionController.dart';
+import '../../Data/Database/database_service.dart';
+import '../../Data/Repositories/transaction_repository_impl.dart';
+import '../Controllers/transaction_controller.dart';
 
 class TransactionFormDialog extends StatefulWidget {
   const TransactionFormDialog({super.key});

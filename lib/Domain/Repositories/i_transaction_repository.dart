@@ -1,5 +1,5 @@
 
-import '../Entities/Transaction.dart';
+import '../Entities/transaction.dart';
 
 abstract class ITransactionRepository {
   Future<List<TransactionEntity>> getTransactionsByMonth(String monthYear);

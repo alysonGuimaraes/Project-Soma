@@ -1,7 +1,7 @@
 
 
-import '../../Domain/Entities/Transaction.dart';
-import '../../Domain/Repositories/ITransactionRepository.dart';
+import '../../Domain/Entities/transaction.dart';
+import '../../Domain/Repositories/i_transaction_repository.dart';
 
 class TransactionController {
   final ITransactionRepository _repository;

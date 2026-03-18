@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'Data/Database/Database_Service.dart';
-import 'Presentation/Layouts/MainLayout.dart';
+import 'Data/Database/database_service.dart';
+import 'Presentation/Layouts/main_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

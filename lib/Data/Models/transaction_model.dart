@@ -1,7 +1,7 @@
 
 import 'dart:convert';
 
-import 'package:project_soma/Domain/Entities/Transaction.dart';
+import 'package:project_soma/Domain/Entities/transaction.dart';
 
 class TransactionModel extends TransactionEntity{
   TransactionModel({

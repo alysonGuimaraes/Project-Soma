@@ -1,7 +1,7 @@
 
-import 'package:project_soma/Data/Models/TransactionModel.dart';
-import 'package:project_soma/Domain/Entities/Transaction.dart';
-import 'package:project_soma/Domain/Repositories/ITransactionRepository.dart';
+import 'package:project_soma/Data/Models/transaction_model.dart';
+import 'package:project_soma/Domain/Entities/transaction.dart';
+import 'package:project_soma/Domain/Repositories/i_transaction_repository.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class TransactionRepositoryImpl extends ITransactionRepository {
