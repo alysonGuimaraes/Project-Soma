@@ -2,12 +2,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:intl/intl.dart';
+import 'package:project_soma/Presentation/Widgets/app_switch_tile.dart';
 
-import '../../Data/data_dependency_injection_config.dart';
 import '../Controllers/transaction_controller.dart';
+import 'app_text_form_field.dart';
 
 class TransactionFormDialog extends StatefulWidget {
-  const TransactionFormDialog({super.key});
+  final TransactionController transactionController;
+
+  const TransactionFormDialog({
+    super.key,
+    required this.transactionController
+  });
 
   @override
   State<TransactionFormDialog> createState() => _TransactionFormDialogState();
@@ -16,7 +22,7 @@ class TransactionFormDialog extends StatefulWidget {
 class _TransactionFormDialogState extends State<TransactionFormDialog> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _controllerData = TextEditingController();
+  final TextEditingController _dataController = TextEditingController();
   DateTime? _selectedDate;
 
   // Controladores dos campos de texto
@@ -31,7 +37,7 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
   // Variáveis de estado (Checkboxes/Switches)
   bool _isPaid = true;
   bool _isFixed = false;
-  bool _isUndeterminedFixed = true; // O seu novo controle visual
+  bool _isUndeterminedFixed = true;
 
   Future<void> _selectData(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -39,20 +45,19 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
-      locale: const Locale('pt', 'BR'), // Configura para português
+      locale: const Locale('pt', 'BR'),
     );
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
-        // Formata a data: dd/MM/yyyy
-        _controllerData.text = DateFormat('dd/MM/yyyy').format(picked);
+        _dataController.text = DateFormat('dd/MM/yyyy').format(picked);
       });
     }
   }
 
   @override
   void dispose() {
-    _controllerData.dispose();
+    _dataController.dispose();
     _valueController.dispose();
     _moneyValueController.dispose();
     _observationController.dispose();
@@ -74,139 +79,128 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
               mainAxisSize: MainAxisSize.min,
               children: [
 
-                // TODO: Quebrar cada um dos campos em widgets menores para reduzir complexidade
-
-                // Campo de Valor
-                TextFormField(
+                AppTextFormField(
                   controller: _moneyValueController,
-                  decoration: const InputDecoration(
-                    labelText: 'Valor (R\$)',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.attach_money_sharp),
-                  ),
+                  label: 'Valor (R\$)',
+                  icon: Icons.attach_money_sharp,
                   keyboardType: TextInputType.number,
                 ),
-                const SizedBox(height: 16),
 
-                TextFormField(
-                  controller: _controllerData,
-                  readOnly: true, // Impede o usuário de digitar
-                  decoration: InputDecoration(
-                    labelText: 'Data de Nascimento',
-                    suffixIcon: Icon(Icons.calendar_today),
-                  ),
-                  onTap: () => _selectData(context), // Abre o calendário
+                AppTextFormField(
+                  controller: _dataController,
+                  label: 'Data de transação',
+                  readOnly: true,
+                  onTap: () => _selectData(context),
                 ),
 
-                // Campo de Observação (Opcional)
-                TextFormField(
+                AppTextFormField(
                   controller: _observationController,
-                  decoration: const InputDecoration(
-                    labelText: 'Observação (Opcional)',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Switches de Estado Simples
-                SwitchListTile(
-                  title: const Text('Já foi pago/recebido?'),
-                  value: _isPaid,
-                  onChanged: (val) => setState(() => _isPaid = val),
-                ),
-                SwitchListTile(
-                  title: const Text('É uma transação fixa?'),
-                  value: _isFixed,
-                  onChanged: (val) => setState(() {
-                    _isFixed = val;
-                    // Se desmarcar o fixo, reseta o estado do indeterminado
-                    if (!val) _isUndeterminedFixed = true;
-                  }),
+                  label: 'Observação (Opcional)',
                 ),
 
-                // Novos campos condicionais (Só aparecem se for Fixo)
-                if (_isFixed) ...[
-                  const Divider(),
-                  CheckboxListTile(
-                    title: const Text('Tempo indeterminado (Assinatura)'),
-                    value: _isUndeterminedFixed,
-                    onChanged: (val) => setState(() {
-                      _isUndeterminedFixed = val ?? true;
-                      if (_isUndeterminedFixed) {
-                        _finalMonthYearController.clear();
-                      }
-                    }),
-                  ),
-                  // Só mostra o campo de Mês Final se NÃO for indeterminado
-                  if (!_isUndeterminedFixed)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: TextFormField(
-                        controller: _finalMonthYearController,
-                        decoration: const InputDecoration(
-                          labelText: 'Mês/Ano Final (ex: 12/2026)',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                ],
+                AppSwitchTile(
+                    title: 'Já foi pago/recebido?',
+                    value: _isPaid,
+                    onChanged: (val) => setState(() => _isPaid = val)
+                ),
+
+                AppSwitchTile(
+                    title: 'É uma transação fixa?',
+                    value: _isFixed,
+                    onChanged: (val) => setState(() {_isFixed = val;if (!val) _isUndeterminedFixed = true;})
+                ),
+
+                _buildFixedSection(),
               ],
             ),
           ),
         ),
       ),
       actions: [
+
         TextButton(
-          onPressed: () => Navigator.of(context).pop(), // Fecha o modal
+          onPressed: () => Navigator.of(context).pop(),
           child: const Text('Cancelar'),
         ),
+
         FilledButton(
-          // TODO: Tirar lógica salvamento do botão em si
-          onPressed: () async {
-            // Valida se os campos obrigatórios estão preenchidos
-            if (_formKey.currentState!.validate()) {
-
-              // TODO: remover chamada do controller daqui, realizar no build do Dialog
-              final controller = await getIt.getAsync<TransactionController>();
-
-              // 2. Tentar converter o valor introduzido para número (Double)
-              final double value = double.tryParse(_moneyValueController.text.replaceAll(',', '.')) ?? 0.0;
-
-              // 3. Definir o Mês Final (nulo se for indeterminado)
-              final String? finalMonth = _isUndeterminedFixed ? null : _finalMonthYearController.text;
-
-              try {
-                // 4. Chamar o controlador para gravar
-                await controller.saveNewTransaction(
-                  value: value,
-                  categoryId: 'cat_provisoria_01', // Ainda vamos criar o menu de categorias!
-                  observation: _observationController.text.isEmpty ? null : _observationController.text,
-                  isFixed: _isFixed,
-                  isPaid: _isPaid,
-                  finalMonthYear: finalMonth,
-                );
-
-                // 5. Se correr bem, fecha o modal e avisa o utilizador
-                if (context.mounted) {
-                  Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Transação registada com sucesso!')),
-                  );
-                }
-              } catch (e) {
-                print('🚨 ERRO AO SALVAR NO BANCO: $e');
-                // Se houver um erro no SQLite, mostra um alerta
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Erro ao gravar: $e'), backgroundColor: Colors.red),
-                  );
-                }
-              }
-            }
-          },
+          onPressed: _handleSave,
           child: const Text('Salvar'),
         ),
       ],
     );
+  }
+
+  Widget _buildFixedSection() {
+    if (!_isFixed) return const SizedBox();
+
+    return Column(
+      children: [
+        const Divider(),
+        CheckboxListTile(
+          title: const Text('Tempo indeterminado (Assinatura)'),
+          value: _isUndeterminedFixed,
+          onChanged: (val) => setState(() {
+            _isUndeterminedFixed = val ?? true;
+            if (_isUndeterminedFixed) {
+              _finalMonthYearController.clear();
+            }
+          }),
+        ),
+        if (!_isUndeterminedFixed)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: TextFormField(
+              controller: _finalMonthYearController,
+              decoration: const InputDecoration(
+                labelText: 'Mês/Ano Final',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Future<void> _handleSave() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final value = double.tryParse(
+      _moneyValueController.text.replaceAll('.', '').replaceAll(',', '.'),
+    ) ?? 0.0;
+
+    final finalMonth =
+    _isUndeterminedFixed ? null : _finalMonthYearController.text;
+
+    try {
+      await widget.transactionController.saveNewTransaction(
+        value: value,
+        categoryId: 'cat_provisoria_01',
+        transactionDate: DateFormat('dd/MM/yyyy').parse(_dataController.text),
+        observation: _observationController.text.isEmpty
+            ? null
+            : _observationController.text,
+        isFixed: _isFixed,
+        isPaid: _isPaid,
+        finalMonthYear: finalMonth,
+      );
+
+      if (!mounted) return;
+
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Transação registrada com sucesso!')),
+      );
+    } catch (e) {
+      print(e);
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao salvar: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }

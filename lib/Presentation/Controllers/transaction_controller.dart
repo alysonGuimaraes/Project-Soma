@@ -10,6 +10,7 @@ class TransactionController {
   Future<void> saveNewTransaction({
     required double value,
     required String categoryId,
+    required DateTime transactionDate,
     String? observation,
     required bool isFixed,
     required bool isPaid,
@@ -25,7 +26,7 @@ class TransactionController {
     final newTransaction = TransactionEntity(
       id: now.millisecondsSinceEpoch.toString(), // Gera um ID único simples
       value: value,
-      transactionDate: now,
+      transactionDate: transactionDate,
       monthYear: currentMonthYear,
       categoryId: categoryId,
       observation: observation,
