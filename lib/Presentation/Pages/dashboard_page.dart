@@ -32,6 +32,8 @@ class DashboardPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           showDialog(
+            // Todo: implementar aqui instanciação do transaction controller
+
             context: context,
             builder: (context) => const TransactionFormDialog(),
           );

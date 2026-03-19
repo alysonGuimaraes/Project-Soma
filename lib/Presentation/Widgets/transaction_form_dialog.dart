@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:intl/intl.dart';
 
-import '../../Data/Database/database_service.dart';
-import '../../Data/Repositories/transaction_repository_impl.dart';
+import '../../Data/data_dependency_injection_config.dart';
 import '../Controllers/transaction_controller.dart';
 
 class TransactionFormDialog extends StatefulWidget {
@@ -66,7 +65,7 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
     return AlertDialog(
       title: const Text('Nova Transação'),
       content: SizedBox(
-        width: 400, // Largura fixa ideal para Desktop
+        width: 400,
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -74,6 +73,8 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
+
+                // TODO: Quebrar cada um dos campos em widgets menores para reduzir complexidade
 
                 // Campo de Valor
                 TextFormField(
@@ -160,14 +161,13 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
           child: const Text('Cancelar'),
         ),
         FilledButton(
+          // TODO: Tirar lógica salvamento do botão em si
           onPressed: () async {
             // Valida se os campos obrigatórios estão preenchidos
             if (_formKey.currentState!.validate()) {
 
-              // 1. Instanciar as dependências (numa app maior, usaríamos injecção de dependências)
-              final db = await DatabaseService().database;
-              final repository = TransactionRepositoryImpl(db);
-              final controller = TransactionController(repository);
+              // TODO: remover chamada do controller daqui, realizar no build do Dialog
+              final controller = await getIt.getAsync<TransactionController>();
 
               // 2. Tentar converter o valor introduzido para número (Double)
               final double value = double.tryParse(_moneyValueController.text.replaceAll(',', '.')) ?? 0.0;

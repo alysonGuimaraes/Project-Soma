@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:project_soma/Data/data_dependency_injection_config.dart';
 
-import 'Data/Database/database_service.dart';
 import 'Presentation/Layouts/main_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final dbService = DatabaseService();
-  await dbService.database;
+  setupDataDependencies();
+  await getIt.allReady();
 
   runApp(const MyApp());
 }

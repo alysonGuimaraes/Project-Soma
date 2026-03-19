@@ -13,7 +13,7 @@ void setupDataDependencies() {
         () async => TransactionRepositoryImpl(await getIt<DatabaseService>().database),
   );
 
-  getIt.registerLazySingleton<TransactionController>(
-        () => TransactionController(getIt<TransactionRepositoryImpl>()),
+  getIt.registerLazySingletonAsync<TransactionController>(
+        () async => TransactionController(await getIt.getAsync<TransactionRepositoryImpl>()),
   );
 }
