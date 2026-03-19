@@ -13,11 +13,11 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   int _selectedIndex = 0;
 
-  // Lista das telas reais que vão aparecer na área principal
   final List<Widget> _pages = [
     const DashboardPage(),
-    const TransactionsPage(), // Placeholder temporário
-    const Center(child: Text('Tela de Configurações')), // Placeholder temporário
+    const TransactionsPage(),
+    const Center(child: Text('Tela de Categorias')),
+    const Center(child: Text('Tela de Configurações')),
   ];
 
   @override
@@ -42,9 +42,13 @@ class _MainLayoutState extends State<MainLayout> {
                 label: Text('Dashboard'),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.list_alt),
-                selectedIcon: Icon(Icons.list),
+                icon: Icon(Icons.featured_play_list_outlined),
+                selectedIcon: Icon(Icons.featured_play_list),
                 label: Text('Transações'),
+              ),NavigationRailDestination(
+                icon: Icon(Icons.category_outlined),
+                selectedIcon: Icon(Icons.category_rounded),
+                label: Text('Categorias'),
               ),
               NavigationRailDestination(
                 icon: Icon(Icons.settings_outlined),
@@ -54,9 +58,8 @@ class _MainLayoutState extends State<MainLayout> {
             ],
           ),
 
-          const VerticalDivider(thickness: 1, width: 1), // Linha divisória
+          const VerticalDivider(thickness: 1, width: 1),
 
-          // 2. Área Principal de Conteúdo
           Expanded(
             child: _pages[_selectedIndex],
           ),

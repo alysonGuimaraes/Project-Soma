@@ -4,19 +4,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class DatabaseService {
-  // Padrão Singleton: Garante apenas uma instância da conexão
-  static final DatabaseService _instance = DatabaseService._internal();
-  static Database? _database;
+  Future<Database>? _databaseFuture;
 
-  factory DatabaseService() => _instance;
-
-  DatabaseService._internal();
-
-  // Retorna o banco, ou inicializa se for a primeira vez
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDatabase();
-    return _database!;
+  Future<Database> get database {
+    _databaseFuture ??= _initDatabase();
+    return _databaseFuture!;
   }
 
   Future<Database> _initDatabase() async {
@@ -26,6 +18,7 @@ class DatabaseService {
       databaseFactory = databaseFactoryFfi;
     }
 
+    // TODO: Revisitar a criação das tabelas e local salvamento para ajuste via configurações
     // 2. Define onde o banco será salvo (ex: Documentos/Soma/soma.db)
     final directory = await getApplicationDocumentsDirectory();
     final dbPath = join(directory.path, 'Soma', 'soma.db');
@@ -46,7 +39,7 @@ class DatabaseService {
     );
   }
 
-  // Script DDL de criação das tabelas
+  // TODO: Revisitar criação das tabelas
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS Categories (

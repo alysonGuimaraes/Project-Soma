@@ -85,6 +85,7 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
                   icon: Icons.attach_money_sharp,
                   keyboardType: TextInputType.number,
                 ),
+                const SizedBox(height: 16),
 
                 AppTextFormField(
                   controller: _dataController,
@@ -92,11 +93,13 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
                   readOnly: true,
                   onTap: () => _selectData(context),
                 ),
+                const SizedBox(height: 16),
 
                 AppTextFormField(
                   controller: _observationController,
                   label: 'Observação (Opcional)',
                 ),
+                const SizedBox(height: 16),
 
                 AppSwitchTile(
                     title: 'Já foi pago/recebido?',

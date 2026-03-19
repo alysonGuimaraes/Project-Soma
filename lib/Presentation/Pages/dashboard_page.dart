@@ -8,6 +8,10 @@ import '../Widgets/transaction_form_dialog.dart';
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
+  // Todo: Carregamento e atualização saldos do dashboard
+
+  // Todo: Criação de gráficos
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +38,8 @@ class DashboardPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           final transactionController = await getIt.getAsync<TransactionController>();
+
+          if (!context.mounted) return;
 
           showDialog(
             context: context,

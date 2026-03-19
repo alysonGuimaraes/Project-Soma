@@ -19,12 +19,11 @@ class TransactionController {
 
     final now = DateTime.now();
 
-    // Formata o mês/ano atual para formato "MMYYYY"
     final currentMonthYear = "${now.month.toString().padLeft(2, '0')}${now.year}";
 
-    // Cria a entidade pura com os dados recolhidos
+    // TODO: Ajustar criacao de id unico via banco mesmo
     final newTransaction = TransactionEntity(
-      id: now.millisecondsSinceEpoch.toString(), // Gera um ID único simples
+      id: now.millisecondsSinceEpoch.toString(), // ID único simples
       value: value,
       transactionDate: transactionDate,
       monthYear: currentMonthYear,
@@ -32,11 +31,14 @@ class TransactionController {
       observation: observation,
       isFixed: isFixed,
       isPaid: isPaid,
-      finalMonthYear: finalMonthYear, // O novo campo que adicionou
+      finalMonthYear: finalMonthYear,
       createdAt: now,
       updatedAt: now,
     );
 
     await _repository.createTransaction(newTransaction);
   }
+
+
+  // TODO: implementar restante dos métodos das transações
 }
