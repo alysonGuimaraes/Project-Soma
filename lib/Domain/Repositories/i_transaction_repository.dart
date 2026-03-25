@@ -1,12 +1,13 @@
 
 import '../Entities/transaction.dart';
+import '../Entities/transaction_filter.dart';
 
 abstract class ITransactionRepository {
-  Future<List<TransactionEntity>> getTransactionsByMonth(String monthYear);
+  Future<List<TransactionEntity>?> getTransactionsByFilter (TransactionFilter filter);
 
-  Future<List<TransactionEntity>> getFixedTransactions();
+  Future<TransactionEntity?> getTransactionById (String id);
 
-  Future<TransactionEntity?> getTransactionById(String id);
+  Future<List<TransactionEntity>?> getTransactionsByMonthYear (String monthYear);
 
   Future<void> createTransaction(TransactionEntity transaction);
 
