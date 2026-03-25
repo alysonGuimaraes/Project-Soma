@@ -85,20 +85,25 @@ void main() {
         updatedAt: oldDate,
       );
 
-      when(() => mockRepository.getTransactionById('id_123'))
-          .thenAnswer((_) async => oldTransaction);
-      when(() => mockRepository.updateTransaction(any())).thenAnswer((_) async {});
-
-      await controller.updateTransaction(
-        id: 'id_123',
+      final newTransactionData = TransactionEntity(
+        id: 'id_errado',
         value: 200.0,
-        categoryId: 'cat_new',
         transactionDate: tDate,
+        monthYear: expectedMonthYear,
+        categoryId: 'cat_new',
         observation: 'Atualização confirmada',
         isFixed: false,
         isPaid: false,
         finalMonthYear: '122026',
+        createdAt: tDate,
+        updatedAt: tDate,
       );
+
+      when(() => mockRepository.getTransactionById('id_123'))
+          .thenAnswer((_) async => oldTransaction);
+      when(() => mockRepository.updateTransaction(any())).thenAnswer((_) async {});
+
+      await controller.updateTransaction(oldTransaction.id, newTransactionData);
 
       final captured = verify(() => mockRepository.updateTransaction(captureAny())).captured;
       final updatedEntity = captured.first as TransactionEntity;
@@ -117,18 +122,12 @@ void main() {
     });
 
     test('Deve lancar Exception ao tentar atualizar uma transacao inexistente', () async {
-      final tDate = DateTime.now();
       when(() => mockRepository.getTransactionById('id_falso'))
           .thenAnswer((_) async => null);
 
-      final call = controller.updateTransaction(
-        id: 'id_falso',
-        value: 100.0,
-        categoryId: 'cat_1',
-        transactionDate: tDate,
-        isFixed: true,
-        isPaid: true,
-      );
+      final newTransactionData = FakeTransactionEntity();
+
+      final call = controller.updateTransaction('id_falso', newTransactionData);
 
       expect(() => call, throwsA(isA<Exception>()));
 

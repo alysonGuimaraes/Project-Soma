@@ -45,16 +45,7 @@ class TransactionController {
     await _repository.deleteTransaction(id);
   }
 
-  Future<void> updateTransaction ({
-      required String id,
-      required double value,
-      required String categoryId,
-      required DateTime transactionDate,
-      String? observation,
-      required bool isFixed,
-      required bool isPaid,
-      String? finalMonthYear
-  }) async {
+  Future<void> updateTransaction (String id, TransactionEntity newTransaction) async {
 
     final oldTransaction = await _repository.getTransactionById(id);
 
@@ -64,18 +55,16 @@ class TransactionController {
 
     final now = DateTime.now();
 
-    final currentMonthYear = "${now.month.toString().padLeft(2, '0')}${now.year}";
-
     final updatedTransaction = TransactionEntity(
       id: oldTransaction.id,
-      value: value,
-      transactionDate: transactionDate,
-      monthYear: currentMonthYear,
-      categoryId: categoryId,
-      observation: observation,
-      isFixed: isFixed,
-      isPaid: isPaid,
-      finalMonthYear: finalMonthYear,
+      value: newTransaction.value,
+      transactionDate: newTransaction.transactionDate,
+      monthYear: newTransaction.monthYear,
+      categoryId: newTransaction.categoryId,
+      observation: newTransaction.observation,
+      isFixed: newTransaction.isFixed,
+      isPaid: newTransaction.isPaid,
+      finalMonthYear: newTransaction.finalMonthYear,
       createdAt: oldTransaction.createdAt,
       updatedAt: now,
     );
