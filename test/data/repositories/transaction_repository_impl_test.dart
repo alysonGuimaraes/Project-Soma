@@ -1,7 +1,6 @@
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:project_soma/Data/Repositories/transaction_repository_impl.dart';
-import 'package:project_soma/Domain/Entities/transaction.dart';
+import 'package:project_soma/data/Repositories/transaction_repository_impl.dart';
+import 'package:project_soma/domain/entities/transaction.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
@@ -32,7 +31,7 @@ void main() {
           ''');
 
           await db.execute('''
-            CREATE TABLE Transactions (
+            CREATE TABLE transactions (
                 id TEXT PRIMARY KEY,
                 value REAL NOT NULL,
                 transactionDate TEXT NOT NULL,

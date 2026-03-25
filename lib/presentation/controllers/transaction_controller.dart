@@ -1,7 +1,7 @@
 
-import 'package:project_soma/Domain/Entities/transaction_filter.dart';
-import '../../Domain/Entities/transaction.dart';
-import '../../Domain/Repositories/i_transaction_repository.dart';
+import '../../domain/entities/transaction_filter.dart';
+import '../../domain/entities/transaction.dart';
+import '../../domain/repositories/i_transaction_repository.dart';
 
 class TransactionController {
   final ITransactionRepository _repository;

@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
-import 'package:project_soma/Presentation/Controllers/transaction_controller.dart';
 
-import '../../Data/data_dependency_injection_config.dart';
-import '../Widgets/transaction_form_dialog.dart';
+import '../../data/data_dependency_injection_config.dart';
+import '../controllers/transaction_controller.dart';
+import '../widgets/transaction_form_dialog.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -37,13 +36,16 @@ class DashboardPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          final transactionController = await getIt.getAsync<TransactionController>();
+          final transactionController = await getIt
+              .getAsync<TransactionController>();
 
           if (!context.mounted) return;
 
           showDialog(
             context: context,
-            builder: (_) => TransactionFormDialog(transactionController: transactionController),
+            builder: (_) => TransactionFormDialog(
+              transactionController: transactionController,
+            ),
           );
         },
         icon: const Icon(Icons.add),

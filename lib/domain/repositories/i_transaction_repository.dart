@@ -1,6 +1,6 @@
 
-import '../Entities/transaction.dart';
-import '../Entities/transaction_filter.dart';
+import '../entities/transaction.dart';
+import '../entities/transaction_filter.dart';
 
 abstract class ITransactionRepository {
   Future<List<TransactionEntity>?> getTransactionsByFilter (TransactionFilter filter);

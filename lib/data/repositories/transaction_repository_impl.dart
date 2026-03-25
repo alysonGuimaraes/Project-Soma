@@ -1,9 +1,10 @@
 
-import 'package:project_soma/Data/Models/transaction_model.dart';
-import 'package:project_soma/Domain/Entities/transaction.dart';
-import 'package:project_soma/Domain/Entities/transaction_filter.dart';
-import 'package:project_soma/Domain/Repositories/i_transaction_repository.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
+import '../../domain/entities/transaction.dart';
+import '../../domain/entities/transaction_filter.dart';
+import '../../domain/repositories/i_transaction_repository.dart';
+import '../models/transaction_model.dart';
 
 class TransactionRepositoryImpl extends ITransactionRepository {
   final Database _database;
@@ -27,7 +28,7 @@ class TransactionRepositoryImpl extends ITransactionRepository {
     );
 
     await _database.insert(
-      'Transactions',
+      'transactions',
       model.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace
     );
@@ -36,7 +37,7 @@ class TransactionRepositoryImpl extends ITransactionRepository {
   @override
   Future<void> deleteTransaction(String id) async {
     await _database.delete(
-      'Transactions',
+      'transactions',
       where: 'id = ?',
       whereArgs: [id],
     );
@@ -58,7 +59,7 @@ class TransactionRepositoryImpl extends ITransactionRepository {
     );
 
     await _database.update(
-      'Transactions',
+      'transactions',
       model.toMap(),
       where: 'id = ?',
       whereArgs: [transaction.id],
@@ -68,7 +69,7 @@ class TransactionRepositoryImpl extends ITransactionRepository {
   @override
   Future<TransactionEntity?> getTransactionById(String id) async {
     final List<Map<String, dynamic>> maps = await _database.query(
-      'Transactions',
+      'transactions',
       where: 'id = ?',
       whereArgs: [id],
     );
@@ -130,7 +131,7 @@ class TransactionRepositoryImpl extends ITransactionRepository {
     List<dynamic>? finalWhereArgs = whereArgs.isNotEmpty ? whereArgs : null;
 
     final List<Map<String, dynamic>> maps = await _database.query(
-      'Transactions',
+      'transactions',
       where: finalWhere,
       whereArgs: finalWhereArgs,
       orderBy: 'transactionDate DESC',
@@ -142,7 +143,7 @@ class TransactionRepositoryImpl extends ITransactionRepository {
   @override
   Future<List<TransactionEntity>?> getTransactionsByMonthYear(String monthYear) async {
     final List<Map<String, dynamic>> maps = await _database.query(
-      'Transactions',
+      'transactions',
       where: 'monthYear = ?',
       whereArgs: [monthYear],
     );
