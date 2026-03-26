@@ -1,8 +1,8 @@
 import 'package:get_it/get_it.dart';
 
-import '../Presentation/Controllers/transaction_controller.dart';
-import 'Database/database_service.dart';
-import 'Repositories/transaction_repository_impl.dart';
+import '../presentation/controllers/transaction_controller.dart';
+import 'database/database_service.dart';
+import 'repositories/transaction_repository_impl.dart';
 
 final getIt = GetIt.instance;
 

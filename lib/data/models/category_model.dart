@@ -1,7 +1,8 @@
 
 import 'dart:convert';
 
-import 'package:project_soma/Domain/Entities/category.dart';
+import '../../domain/Entities/category.dart';
+
 
 class CategoryModel extends CategoryEntity{
   CategoryModel({

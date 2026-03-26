@@ -54,7 +54,7 @@ class DatabaseService {
     ''');
 
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS Transactions (
+      CREATE TABLE IF NOT EXISTS transactions (
           id TEXT PRIMARY KEY,
           value REAL NOT NULL,
           transactionDate TEXT NOT NULL,

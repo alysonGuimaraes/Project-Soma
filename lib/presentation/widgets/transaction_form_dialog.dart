@@ -1,19 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:intl/intl.dart';
 import 'package:project_soma/Presentation/Widgets/app_switch_tile.dart';
 
-import '../Controllers/transaction_controller.dart';
+import '../controllers/transaction_controller.dart';
 import 'app_text_form_field.dart';
 
 class TransactionFormDialog extends StatefulWidget {
   final TransactionController transactionController;
 
-  const TransactionFormDialog({
-    super.key,
-    required this.transactionController
-  });
+  const TransactionFormDialog({super.key, required this.transactionController});
 
   @override
   State<TransactionFormDialog> createState() => _TransactionFormDialogState();
@@ -28,8 +24,8 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
   // Controladores dos campos de texto
   final _valueController = TextEditingController();
   final _moneyValueController = MoneyMaskedTextController(
-      decimalSeparator: ',',
-      thousandSeparator: '.'
+    decimalSeparator: ',',
+    thousandSeparator: '.',
   );
   final _observationController = TextEditingController();
   final _finalMonthYearController = TextEditingController();
@@ -78,7 +74,6 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-
                 AppTextFormField(
                   controller: _moneyValueController,
                   label: 'Valor (R\$)',
@@ -89,7 +84,7 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
 
                 AppTextFormField(
                   controller: _dataController,
-                  label: 'Data de transação',
+                  label: 'data de transação',
                   readOnly: true,
                   onTap: () => _selectData(context),
                 ),
@@ -102,15 +97,18 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
                 const SizedBox(height: 16),
 
                 AppSwitchTile(
-                    title: 'Já foi pago/recebido?',
-                    value: _isPaid,
-                    onChanged: (val) => setState(() => _isPaid = val)
+                  title: 'Já foi pago/recebido?',
+                  value: _isPaid,
+                  onChanged: (val) => setState(() => _isPaid = val),
                 ),
 
                 AppSwitchTile(
-                    title: 'É uma transação fixa?',
-                    value: _isFixed,
-                    onChanged: (val) => setState(() {_isFixed = val;if (!val) _isUndeterminedFixed = true;})
+                  title: 'É uma transação fixa?',
+                  value: _isFixed,
+                  onChanged: (val) => setState(() {
+                    _isFixed = val;
+                    if (!val) _isUndeterminedFixed = true;
+                  }),
                 ),
 
                 _buildFixedSection(),
@@ -120,16 +118,12 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
         ),
       ),
       actions: [
-
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('Cancelar'),
         ),
 
-        FilledButton(
-          onPressed: _handleSave,
-          child: const Text('Salvar'),
-        ),
+        FilledButton(onPressed: _handleSave, child: const Text('Salvar')),
       ],
     );
   }
@@ -168,12 +162,15 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
   Future<void> _handleSave() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final value = double.tryParse(
-      _moneyValueController.text.replaceAll('.', '').replaceAll(',', '.'),
-    ) ?? 0.0;
+    final value =
+        double.tryParse(
+          _moneyValueController.text.replaceAll('.', '').replaceAll(',', '.'),
+        ) ??
+        0.0;
 
-    final finalMonth =
-    _isUndeterminedFixed ? null : _finalMonthYearController.text;
+    final finalMonth = _isUndeterminedFixed
+        ? null
+        : _finalMonthYearController.text;
 
     try {
       await widget.transactionController.saveNewTransaction(
