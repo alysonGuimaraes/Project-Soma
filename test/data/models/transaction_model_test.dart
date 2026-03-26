@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:project_soma/data/Models/transaction_model.dart';
+import 'package:project_soma/data/models/transaction_model.dart';
 
 void main() {
   group('TransactionModel |', () {
