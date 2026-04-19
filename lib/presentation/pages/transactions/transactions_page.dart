@@ -23,7 +23,7 @@ class TransactionsPage extends StatelessWidget {
             Expanded(child: _buildRightColumn()),
           ],
         ),
-      ),
+      )
     );
   }
 

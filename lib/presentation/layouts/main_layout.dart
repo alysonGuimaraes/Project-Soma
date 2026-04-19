@@ -1,7 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:project_soma/Presentation/Pages/Transactions/transactions_page.dart';
-import '../Pages/dashboard_page.dart';
+
+import '../pages/dashboard_page.dart';
+import '../pages/transactions/transactions_page.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
