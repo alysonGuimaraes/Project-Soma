@@ -4,6 +4,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
+import 'dart:ui' as _i7;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:project_soma/features/transaction/domain/entities/transaction.dart'
@@ -12,6 +13,8 @@ import 'package:project_soma/features/transaction/domain/entities/transaction_fi
     as _i5;
 import 'package:project_soma/features/transaction/domain/repository/i_transaction_repository.dart'
     as _i2;
+import 'package:project_soma/features/transaction/presentation/controller/transaction_form_controller.dart'
+    as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -33,10 +36,6 @@ import 'package:project_soma/features/transaction/domain/repository/i_transactio
 /// See the documentation for Mockito's code generation for more information.
 class MockITransactionRepository extends _i1.Mock
     implements _i2.ITransactionRepository {
-  MockITransactionRepository() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i3.Future<List<_i4.TransactionEntity>?> getTransactionsByFilter(
     _i5.TransactionFilter? filter,
@@ -44,6 +43,8 @@ class MockITransactionRepository extends _i1.Mock
       (super.noSuchMethod(
             Invocation.method(#getTransactionsByFilter, [filter]),
             returnValue: _i3.Future<List<_i4.TransactionEntity>?>.value(),
+            returnValueForMissingStub:
+                _i3.Future<List<_i4.TransactionEntity>?>.value(),
           )
           as _i3.Future<List<_i4.TransactionEntity>?>);
 
@@ -52,6 +53,8 @@ class MockITransactionRepository extends _i1.Mock
       (super.noSuchMethod(
             Invocation.method(#getTransactionById, [id]),
             returnValue: _i3.Future<_i4.TransactionEntity?>.value(),
+            returnValueForMissingStub:
+                _i3.Future<_i4.TransactionEntity?>.value(),
           )
           as _i3.Future<_i4.TransactionEntity?>);
 
@@ -64,6 +67,10 @@ class MockITransactionRepository extends _i1.Mock
             returnValue: _i3.Future<List<_i4.TransactionEntity>>.value(
               <_i4.TransactionEntity>[],
             ),
+            returnValueForMissingStub:
+                _i3.Future<List<_i4.TransactionEntity>>.value(
+                  <_i4.TransactionEntity>[],
+                ),
           )
           as _i3.Future<List<_i4.TransactionEntity>>);
 
@@ -93,4 +100,104 @@ class MockITransactionRepository extends _i1.Mock
             returnValueForMissingStub: _i3.Future<void>.value(),
           )
           as _i3.Future<void>);
+}
+
+/// A class which mocks [TransactionFormController].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockTransactionFormController extends _i1.Mock
+    implements _i6.TransactionFormController {
+  @override
+  bool get isSubmitting =>
+      (super.noSuchMethod(
+            Invocation.getter(#isSubmitting),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
+
+  @override
+  bool get success =>
+      (super.noSuchMethod(
+            Invocation.getter(#success),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
+
+  @override
+  set isSubmitting(bool? value) => super.noSuchMethod(
+    Invocation.setter(#isSubmitting, value),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  set error(String? value) => super.noSuchMethod(
+    Invocation.setter(#error, value),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  set success(bool? value) => super.noSuchMethod(
+    Invocation.setter(#success, value),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  bool get hasListeners =>
+      (super.noSuchMethod(
+            Invocation.getter(#hasListeners),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
+
+  @override
+  _i3.Future<void> save({
+    required double? value,
+    required String? categoryId,
+    required DateTime? transactionDate,
+    required bool? isFixed,
+    required bool? isPaid,
+    String? observation,
+    String? finalMonthYear,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#save, [], {
+              #value: value,
+              #categoryId: categoryId,
+              #transactionDate: transactionDate,
+              #isFixed: isFixed,
+              #isPaid: isPaid,
+              #observation: observation,
+              #finalMonthYear: finalMonthYear,
+            }),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  void addListener(_i7.VoidCallback? listener) => super.noSuchMethod(
+    Invocation.method(#addListener, [listener]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void removeListener(_i7.VoidCallback? listener) => super.noSuchMethod(
+    Invocation.method(#removeListener, [listener]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void dispose() => super.noSuchMethod(
+    Invocation.method(#dispose, []),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void notifyListeners() => super.noSuchMethod(
+    Invocation.method(#notifyListeners, []),
+    returnValueForMissingStub: null,
+  );
 }

@@ -128,8 +128,13 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
                 AppTextFormField(
                   controller: _dataController,
                   label: 'Data de transação',
-                  readOnly: true,
                   onTap: () => _selectDate(context),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'A data é obrigatória';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
 

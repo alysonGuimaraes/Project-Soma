@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class AppTextFormField extends StatelessWidget {
@@ -8,6 +7,7 @@ class AppTextFormField extends StatelessWidget {
   final bool readOnly;
   final VoidCallback? onTap;
   final TextInputType? keyboardType;
+  final String? Function(String?)? validator;
 
   const AppTextFormField({
     super.key,
@@ -17,6 +17,7 @@ class AppTextFormField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.keyboardType,
+    this.validator,
   });
 
   @override
@@ -26,6 +27,7 @@ class AppTextFormField extends StatelessWidget {
       readOnly: readOnly,
       keyboardType: keyboardType,
       onTap: onTap,
+      validator: validator,
       decoration: InputDecoration(
         labelText: label,
         border: const OutlineInputBorder(),
