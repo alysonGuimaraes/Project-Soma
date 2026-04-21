@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:project_soma/data/data_dependency_injection_config.dart';
+import 'package:project_soma/features/transaction/di/dependency_injection.dart';
 
-import 'presentation/layouts/main_layout.dart';
+import 'navigation/main_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
