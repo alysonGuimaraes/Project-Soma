@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:project_soma/core/widgets/components/app_switch_tile.dart';
 import 'package:project_soma/core/widgets/components/app_text_form_field.dart';
-import 'package:project_soma/features/transaction/presentation/controller/transaction_form_controller.dart';
+import 'package:project_soma/features/transaction/presentation/controllers/transaction_form_controller.dart';
 import 'package:project_soma/features/transaction/presentation/widgets/transaction_form_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -103,7 +103,7 @@ void main() {
     );
 
     testWidgets(
-      'Deve realizar o parsing correto dos dados e acionar controller.save',
+      'Deve realizar o parsing correto dos dados e acionar controllers.save',
       (tester) async {
         when(
           mockController.save(
@@ -167,7 +167,7 @@ void main() {
     );
 
     testWidgets(
-      'Não deve chamar o controller.save se o formulário for inválido',
+      'Não deve chamar o controllers.save se o formulário for inválido',
       (tester) async {
         await tester.pumpWidget(buildSubject());
 

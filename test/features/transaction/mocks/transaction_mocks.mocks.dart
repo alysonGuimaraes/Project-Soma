@@ -13,7 +13,9 @@ import 'package:project_soma/features/transaction/domain/entities/transaction_fi
     as _i5;
 import 'package:project_soma/features/transaction/domain/repository/i_transaction_repository.dart'
     as _i2;
-import 'package:project_soma/features/transaction/presentation/controller/transaction_form_controller.dart'
+import 'package:project_soma/features/transaction/domain/usecases/save_transaction_usecase.dart'
+    as _i8;
+import 'package:project_soma/features/transaction/presentation/controllers/transaction_form_controller.dart'
     as _i6;
 
 // ignore_for_file: type=lint
@@ -200,4 +202,35 @@ class MockTransactionFormController extends _i1.Mock
     Invocation.method(#notifyListeners, []),
     returnValueForMissingStub: null,
   );
+}
+
+/// A class which mocks [SaveTransactionUseCase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSaveTransactionUseCase extends _i1.Mock
+    implements _i8.SaveTransactionUseCase {
+  @override
+  _i3.Future<void> call({
+    required double? value,
+    required String? categoryId,
+    required DateTime? transactionDate,
+    required bool? isFixed,
+    required bool? isPaid,
+    String? observation,
+    String? finalMonthYear,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#call, [], {
+              #value: value,
+              #categoryId: categoryId,
+              #transactionDate: transactionDate,
+              #isFixed: isFixed,
+              #isPaid: isPaid,
+              #observation: observation,
+              #finalMonthYear: finalMonthYear,
+            }),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 }

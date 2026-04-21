@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../transaction/presentation/controller/transaction_form_controller.dart';
+import '../../../transaction/presentation/controllers/transaction_form_controller.dart';
 import '../../../transaction/presentation/widgets/transaction_form_dialog.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -33,7 +33,7 @@ class DashboardPage extends StatelessWidget {
         onPressed: () => showDialog(
           context: context,
           builder: (dialogContext) => ChangeNotifierProvider.value(
-            // Passa o controller já existente para dentro do dialog
+            // Passa o controllers já existente para dentro do dialog
             value: context.read<TransactionFormController>(),
             child: const TransactionFormDialog(),
           ),

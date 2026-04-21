@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/widgets/components/app_switch_tile.dart';
 import '../../../../core/widgets/components/app_text_form_field.dart';
 import '../../../../core/widgets/layouts/app_form.dart';
-import '../../presentation/controller/transaction_form_controller.dart';
+import '../../presentation/controllers/transaction_form_controller.dart';
 
 class TransactionFormDialog extends StatefulWidget {
   const TransactionFormDialog({super.key});
@@ -88,7 +88,7 @@ class _TransactionFormDialogState extends State<TransactionFormDialog> {
 
     if (!mounted) return;
 
-    // UI reage ao estado do controller
+    // UI reage ao estado do controllers
     final controller = context.read<TransactionFormController>();
     if (controller.success) {
       Navigator.of(context).pop();

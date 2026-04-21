@@ -6,8 +6,8 @@ import '../data/repository/transaction_repository_impl.dart';
 import '../domain/repository/i_transaction_repository.dart';
 import '../domain/usecases/get_transaction_by_monthyear_usecase.dart';
 import '../domain/usecases/save_transaction_usecase.dart';
-import '../presentation/controller/transaction_form_controller.dart';
-import '../presentation/controller/transaction_list_controller.dart';
+import '../presentation/controllers/transaction_form_controller.dart';
+import '../presentation/controllers/transaction_list_controller.dart';
 
 class TransactionDI {
   static Future<List<SingleChildWidget>> providers() async {
