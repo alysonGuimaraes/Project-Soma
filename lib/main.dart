@@ -1,34 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:project_soma/features/transaction/di/dependency_injection.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
+import 'features/transaction/di/transaction_di.dart';
 import 'navigation/main_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  setupDataDependencies();
-  await getIt.allReady();
+  final transactionProviders = await TransactionDI.providers();
 
-  runApp(const MyApp());
+  runApp(MyApp(providers: transactionProviders));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final List<SingleChildWidget> providers;
+
+  const MyApp({super.key, required this.providers});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Soma',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blueGrey),
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [Locale('pt', 'BR'), Locale('en', 'US')],
-      home: const Scaffold(body: MainLayout()),
+    return MultiProvider(
+      providers: providers,
+      child: MaterialApp(
+        title: 'Soma',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blueGrey),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('pt', 'BR'), Locale('en', 'US')],
+        home: const Scaffold(body: MainLayout()),
+      ),
     );
   }
 }

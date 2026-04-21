@@ -41,7 +41,7 @@ class DatabaseService {
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS Categories (
-          id TEXT PRIMARY KEY,
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
           description TEXT NOT NULL,
           type TEXT NOT NULL,
           colorHex TEXT,
@@ -53,7 +53,7 @@ class DatabaseService {
 
     await db.execute('''
       CREATE TABLE IF NOT EXISTS transactions (
-          id TEXT PRIMARY KEY,
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
           value REAL NOT NULL,
           transactionDate TEXT NOT NULL,
           monthYear TEXT NOT NULL,

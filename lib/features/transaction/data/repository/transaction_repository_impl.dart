@@ -34,7 +34,7 @@ class TransactionRepositoryImpl extends ITransactionRepository {
   }
 
   @override
-  Future<void> deleteTransaction(String id) async {
+  Future<void> deleteTransaction(int id) async {
     await _database.delete('transactions', where: 'id = ?', whereArgs: [id]);
   }
 
@@ -62,7 +62,7 @@ class TransactionRepositoryImpl extends ITransactionRepository {
   }
 
   @override
-  Future<TransactionEntity?> getTransactionById(String id) async {
+  Future<TransactionEntity?> getTransactionById(int id) async {
     final List<Map<String, dynamic>> maps = await _database.query(
       'transactions',
       where: 'id = ?',
@@ -140,7 +140,7 @@ class TransactionRepositoryImpl extends ITransactionRepository {
   }
 
   @override
-  Future<List<TransactionEntity>?> getTransactionsByMonthYear(
+  Future<List<TransactionEntity>> getTransactionsByMonthYear(
     String monthYear,
   ) async {
     final List<Map<String, dynamic>> maps = await _database.query(
@@ -152,6 +152,7 @@ class TransactionRepositoryImpl extends ITransactionRepository {
     if (maps.isNotEmpty) {
       return maps.map((map) => TransactionModel.fromMap(map)).toList();
     }
-    return null;
+
+    return maps.map((map) => TransactionModel.fromMap(map)).toList();
   }
 }

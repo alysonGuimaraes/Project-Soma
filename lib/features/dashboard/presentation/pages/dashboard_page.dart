@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../transaction/di/dependency_injection.dart';
+import '../../../transaction/presentation/controller/transaction_form_controller.dart';
 import '../../../transaction/presentation/widgets/transaction_form_dialog.dart';
-import '../../../transaction/service/transaction_service.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
-
-  // Todo: Carregamento e atualização saldos do dashboard
-
-  // Todo: Criação de gráficos
 
   @override
   Widget build(BuildContext context) {
@@ -30,22 +26,18 @@ class DashboardPage extends StatelessWidget {
               style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
             ),
             Text('Saldo atual', style: TextStyle(color: Colors.grey)),
-            // Aqui entrarão os gráficos e cards no futuro!
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          final transactionService = await getIt.getAsync<TransactionService>();
-
-          if (!context.mounted) return;
-
-          showDialog(
-            context: context,
-            builder: (_) =>
-                TransactionFormDialog(transactionService: transactionService),
-          );
-        },
+        onPressed: () => showDialog(
+          context: context,
+          builder: (dialogContext) => ChangeNotifierProvider.value(
+            // Passa o controller já existente para dentro do dialog
+            value: context.read<TransactionFormController>(),
+            child: const TransactionFormDialog(),
+          ),
+        ),
         icon: const Icon(Icons.add),
         label: const Text('Nova Transação'),
       ),

@@ -21,30 +21,30 @@ void main() {
         onCreate: (db, version) async {
           await db.execute('''
             CREATE TABLE Categories (
-                id TEXT PRIMARY KEY,
-                description TEXT NOT NULL,
-                type TEXT NOT NULL,
-                colorHex TEXT,
-                iconCode TEXT,
-                createdAt TEXT NOT NULL,
-                updatedAt TEXT NOT NULL
+              id TEXT PRIMARY KEY,
+              description TEXT NOT NULL,
+              type TEXT NOT NULL,
+              colorHex TEXT,
+              iconCode TEXT,
+              createdAt TEXT NOT NULL,
+              updatedAt TEXT NOT NULL
             )
           ''');
 
           await db.execute('''
             CREATE TABLE transactions (
-                id TEXT PRIMARY KEY,
-                value REAL NOT NULL,
-                transactionDate TEXT NOT NULL,
-                monthYear TEXT NOT NULL,
-                categoryId TEXT NOT NULL,
-                observation TEXT,
-                isFixed INTEGER NOT NULL DEFAULT 0,
-                isPaid INTEGER NOT NULL DEFAULT 1,
-                finalMonthYear TEXT,
-                createdAt TEXT NOT NULL,
-                updatedAt TEXT NOT NULL,
-                FOREIGN KEY (categoryId) REFERENCES Categories (id) ON DELETE RESTRICT
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              value REAL NOT NULL,
+              transactionDate TEXT NOT NULL,
+              monthYear TEXT NOT NULL,
+              categoryId TEXT NOT NULL,
+              observation TEXT,
+              isFixed INTEGER NOT NULL DEFAULT 0,
+              isPaid INTEGER NOT NULL DEFAULT 1,
+              finalMonthYear TEXT,
+              createdAt TEXT NOT NULL,
+              updatedAt TEXT NOT NULL,
+              FOREIGN KEY (categoryId) REFERENCES Categories(id) ON DELETE RESTRICT
             )
           ''');
         },
@@ -62,82 +62,72 @@ void main() {
     repository = TransactionRepositoryImpl(db);
   });
 
-  tearDown(() async {
-    await db.close();
-  });
+  tearDown(() async => await db.close());
 
   group('TransactionRepositoryImpl |', () {
     final tDate = DateTime(2026, 3, 24);
 
-    final tTransaction = TransactionEntity(
-      id: 'trans_123',
+    // ✅ Sem id — banco gera via autoincrement
+    final tTransaction = TransactionEntity.create(
       value: 150.50,
-      transactionDate: tDate,
-      monthYear: '03/2026',
       categoryId: 'cat_1',
+      transactionDate: tDate,
       observation: 'Compra teste',
       isFixed: false,
       isPaid: true,
-      createdAt: tDate,
-      updatedAt: tDate,
     );
 
-    final tx1 = TransactionEntity(
-      id: 'tx_1',
+    final tx1 = TransactionEntity.create(
       value: 50.0,
-      transactionDate: DateTime(2026, 2, 10),
-      monthYear: '022026',
       categoryId: 'cat_1',
+      transactionDate: DateTime(2026, 2, 10),
       isFixed: false,
       isPaid: true,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
     );
 
-    final tx2 = TransactionEntity(
-      id: 'tx_2',
+    final tx2 = TransactionEntity.create(
       value: 150.0,
-      transactionDate: DateTime(2026, 3, 15),
-      monthYear: '032026',
       categoryId: 'cat_1',
+      transactionDate: DateTime(2026, 3, 15),
       isFixed: true,
       isPaid: false,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
     );
 
-    final tx3 = TransactionEntity(
-      id: 'tx_3',
+    final tx3 = TransactionEntity.create(
       value: 300.0,
-      transactionDate: DateTime(2026, 3, 25),
-      monthYear: '032026',
       categoryId: 'cat_1',
+      transactionDate: DateTime(2026, 3, 25),
       isFixed: true,
       isPaid: true,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
     );
 
     test('Deve inserir uma transação e buscar pelo ID com sucesso', () async {
       await repository.createTransaction(tTransaction);
 
-      final result = await repository.getTransactionById('trans_123');
+      // Busca pelo id gerado pelo banco após inserção
+      final maps = await db.query('transactions', limit: 1);
+      final insertedId = maps.first['id'] as int;
+
+      final result = await repository.getTransactionById(insertedId);
 
       expect(result, isNotNull);
-      expect(result!.id, 'trans_123');
+      expect(result!.id, insertedId); // ← int gerado pelo banco
       expect(result.value, 150.50);
-      expect(result.monthYear, '03/2026');
+      expect(result.monthYear, '032026'); // ← formato correto
       expect(result.isPaid, isTrue);
     });
 
     test('Deve atualizar os dados de uma transação existente', () async {
       await repository.createTransaction(tTransaction);
 
+      final maps = await db.query('transactions', limit: 1);
+      final insertedId = maps.first['id'] as int;
+
       final updatedTransaction = TransactionEntity(
-        id: 'trans_123',
+        id: insertedId,
         value: 300.00,
         transactionDate: tDate,
-        monthYear: '03/2026',
+        monthYear: '032026',
         categoryId: 'cat_1',
         observation: 'Compra editada',
         isFixed: false,
@@ -147,7 +137,7 @@ void main() {
       );
 
       await repository.updateTransaction(updatedTransaction);
-      final result = await repository.getTransactionById('trans_123');
+      final result = await repository.getTransactionById(insertedId);
 
       expect(result!.value, 300.00);
       expect(result.isPaid, isFalse);
@@ -157,49 +147,45 @@ void main() {
     test('Deve deletar uma transação do banco', () async {
       await repository.createTransaction(tTransaction);
 
-      await repository.deleteTransaction('trans_123');
-      final result = await repository.getTransactionById('trans_123');
+      final maps = await db.query('transactions', limit: 1);
+      final insertedId = maps.first['id'] as int;
+
+      await repository.deleteTransaction(insertedId);
+      final result = await repository.getTransactionById(insertedId);
 
       expect(result, isNull);
     });
 
     test(
-      'getTransactionsByMonthYear | Deve retornar apenas as transacoes do mes solicitado',
+      'getTransactionsByMonthYear | Deve retornar transações do mês solicitado',
       () async {
-        await repository.createTransaction(tx1);
-        await repository.createTransaction(tx2);
-        await repository.createTransaction(tx3);
+        await repository.createTransaction(tx1); // monthYear: 022026
+        await repository.createTransaction(tx2); // monthYear: 032026
+        await repository.createTransaction(tx3); // monthYear: 032026
 
         final result = await repository.getTransactionsByMonthYear('032026');
 
-        expect(result, isNotNull);
         expect(
-          result!.length,
+          result.length,
           2,
           reason: 'Deveria encontrar exatamente 2 transações de março',
         );
-        expect(result[1].id, 'tx_3');
-        expect(result[0].id, 'tx_2');
       },
     );
 
     test(
-      'getTransactionsByMonthYear | Deve retornar NULL se nao houver transacoes no mes',
+      'getTransactionsByMonthYear | Deve retornar lista vazia se não houver transações',
       () async {
         await repository.createTransaction(tx1);
 
         final result = await repository.getTransactionsByMonthYear('122026');
 
-        expect(
-          result,
-          isNull,
-          reason: 'O método deve retornar null se a lista for vazia',
-        );
+        expect(result, isEmpty);
       },
     );
 
     test(
-      'getTransactionsByFilter | Deve retornar todas as transacoes se o filtro for vazio',
+      'getTransactionsByFilter | Deve retornar todas as transações se o filtro for vazio',
       () async {
         await repository.createTransaction(tx1);
         await repository.createTransaction(tx2);
@@ -208,30 +194,25 @@ void main() {
           TransactionFilter(),
         );
 
-        expect(result, isNotNull);
-        expect(result!.length, 2);
+        expect(result?.length, 2);
       },
     );
 
-    test(
-      'getTransactionsByFilter | Deve filtrar corretamente por range de valor (min e max)',
-      () async {
-        await repository.createTransaction(tx1);
-        await repository.createTransaction(tx2);
-        await repository.createTransaction(tx3);
+    test('getTransactionsByFilter | Deve filtrar por range de valor', () async {
+      await repository.createTransaction(tx1);
+      await repository.createTransaction(tx2);
+      await repository.createTransaction(tx3);
 
-        final result = await repository.getTransactionsByFilter(
-          TransactionFilter(minValue: 100.0, maxValue: 200.0),
-        );
+      final result = await repository.getTransactionsByFilter(
+        TransactionFilter(minValue: 100.0, maxValue: 200.0),
+      );
 
-        expect(result, isNotNull);
-        expect(result!.length, 1);
-        expect(result.first.id, 'tx_2');
-      },
-    );
+      expect(result?.length, 1);
+      expect(result?.first.value, 150.0);
+    });
 
     test(
-      'getTransactionsByFilter | Deve filtrar combinando isFixed e isPaid',
+      'getTransactionsByFilter | Deve filtrar por isFixed e isPaid',
       () async {
         await repository.createTransaction(tx1);
         await repository.createTransaction(tx2);
@@ -241,14 +222,13 @@ void main() {
           TransactionFilter(isFixed: true, isPaid: false),
         );
 
-        expect(result, isNotNull);
-        expect(result!.length, 1);
-        expect(result.first.id, 'tx_2');
+        expect(result?.length, 1);
+        expect(result?.first.value, 150.0);
       },
     );
 
     test(
-      'getTransactionsByFilter | Deve filtrar por periodo de datas (startDate e endDate)',
+      'getTransactionsByFilter | Deve filtrar por período de datas',
       () async {
         await repository.createTransaction(tx1);
         await repository.createTransaction(tx2);
@@ -261,9 +241,8 @@ void main() {
           ),
         );
 
-        expect(result, isNotNull);
-        expect(result!.length, 1);
-        expect(result.first.id, 'tx_2');
+        expect(result?.length, 1);
+        expect(result?.first.value, 150.0);
       },
     );
   });

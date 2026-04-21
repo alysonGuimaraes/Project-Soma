@@ -6,13 +6,13 @@ abstract class ITransactionRepository {
     TransactionFilter filter,
   );
 
-  Future<TransactionEntity?> getTransactionById(String id);
+  Future<TransactionEntity?> getTransactionById(int id);
 
-  Future<List<TransactionEntity>?> getTransactionsByMonthYear(String monthYear);
+  Future<List<TransactionEntity>> getTransactionsByMonthYear(String monthYear);
 
   Future<void> createTransaction(TransactionEntity transaction);
 
   Future<void> updateTransaction(TransactionEntity transaction);
 
-  Future<void> deleteTransaction(String id);
+  Future<void> deleteTransaction(int id);
 }

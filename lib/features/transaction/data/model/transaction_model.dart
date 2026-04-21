@@ -4,7 +4,7 @@ import '../../domain/entities/transaction.dart';
 
 class TransactionModel extends TransactionEntity {
   TransactionModel({
-    required super.id,
+    super.id,
     required super.value,
     required super.transactionDate,
     required super.monthYear,
@@ -19,7 +19,7 @@ class TransactionModel extends TransactionEntity {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      if (id != null) 'id': id,
       'value': value,
       'transactionDate': transactionDate.toIso8601String(),
       'monthYear': monthYear,
@@ -35,7 +35,7 @@ class TransactionModel extends TransactionEntity {
 
   factory TransactionModel.fromMap(Map<String, dynamic> map) {
     return TransactionModel(
-      id: map['id'],
+      id: map['id'] as int?,
       value: map['value'],
       transactionDate: DateTime.parse(map['transactionDate']),
       monthYear: map['monthYear'],

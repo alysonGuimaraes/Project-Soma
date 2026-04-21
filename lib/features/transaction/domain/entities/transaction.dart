@@ -1,6 +1,5 @@
-
 class TransactionEntity {
-  final String id;
+  final int? id;
   final double value;
   final DateTime transactionDate;
   final String monthYear;
@@ -13,7 +12,7 @@ class TransactionEntity {
   final DateTime updatedAt;
 
   TransactionEntity({
-    required this.id,
+    this.id,
     required this.value,
     required this.transactionDate,
     required this.monthYear,
@@ -23,6 +22,32 @@ class TransactionEntity {
     this.isFixed = false,
     this.isPaid = true,
     required this.createdAt,
-    required this.updatedAt
+    required this.updatedAt,
   });
+
+  factory TransactionEntity.create({
+    required double value,
+    required String categoryId,
+    required DateTime transactionDate,
+    required bool isFixed,
+    required bool isPaid,
+    String? observation,
+    String? finalMonthYear,
+  }) {
+    final now = DateTime.now();
+    return TransactionEntity(
+      id: null,
+      value: value,
+      monthYear:
+          "${transactionDate.month.toString().padLeft(2, '0')}${transactionDate.year}",
+      categoryId: categoryId,
+      transactionDate: transactionDate,
+      isFixed: isFixed,
+      isPaid: isPaid,
+      observation: observation,
+      finalMonthYear: finalMonthYear,
+      createdAt: now,
+      updatedAt: now,
+    );
+  }
 }
