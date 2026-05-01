@@ -103,7 +103,7 @@ void main() {
     );
 
     testWidgets(
-      'Deve realizar o parsing correto dos dados e acionar controllers.save',
+      'Deve realizar o parsing correto dos dados e acionar formatters.save',
       (tester) async {
         when(
           mockController.save(
@@ -167,7 +167,7 @@ void main() {
     );
 
     testWidgets(
-      'Não deve chamar o controllers.save se o formulário for inválido',
+      'Não deve chamar o formatters.save se o formulário for inválido',
       (tester) async {
         await tester.pumpWidget(buildSubject());
 

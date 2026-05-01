@@ -33,7 +33,7 @@ class DashboardPage extends StatelessWidget {
         onPressed: () => showDialog(
           context: context,
           builder: (dialogContext) => ChangeNotifierProvider.value(
-            // Passa o controllers já existente para dentro do dialog
+            // Passa o formatters já existente para dentro do dialog
             value: context.read<TransactionFormController>(),
             child: const TransactionFormDialog(),
           ),
