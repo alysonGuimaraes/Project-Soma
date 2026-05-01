@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:project_soma/core/exceptions/validation_exception.dart';
 
 import '../../domain/usecases/save_transaction_usecase.dart';
 
@@ -37,6 +38,8 @@ class TransactionFormController extends ChangeNotifier {
         finalMonthYear: finalMonthYear,
       );
       success = true;
+    } on ValidationException catch (e) {
+      error = e.message;
     } catch (e) {
       error = 'Erro ao salvar transação';
     } finally {
