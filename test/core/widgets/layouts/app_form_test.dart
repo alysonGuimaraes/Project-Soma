@@ -272,8 +272,8 @@ void main() {
           sections: [
             singleFieldSection(
               const AppFormField(
-                id: 'age',
-                label: 'Idade',
+                id: 'value',
+                label: 'Valor',
                 type: AppFieldType.number,
               ),
             ),
@@ -285,7 +285,7 @@ void main() {
       await tester.tap(find.text('Salvar'));
       await tester.pump();
 
-      expect(result?['age'], '25');
+      expect(result?['value'], 25.0);
     });
 
     testWidgets('deve exibir erro quando obrigatório e vazio', (tester) async {
@@ -751,7 +751,7 @@ void main() {
 
       expect(find.text('Nome'), findsOneWidget);
       expect(find.text('Sobrenome'), findsOneWidget);
-      expect(find.byType(Expanded), findsNWidgets(2));
+      expect(find.byType(TextFormField), findsNWidgets(2));
     });
 
     testWidgets('deve submeter dados de múltiplas seções', (tester) async {

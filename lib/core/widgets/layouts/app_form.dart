@@ -396,7 +396,6 @@ class _AppFormState extends State<AppForm> {
               controlAffinity: ListTileControlAffinity.leading,
               contentPadding: EdgeInsets.zero,
               dense: true,
-              // Removemos as bordas e fundo internos do ListTile para não brigar com o Decorator
               tileColor: Colors.transparent,
             ),
           );
