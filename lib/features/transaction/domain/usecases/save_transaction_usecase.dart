@@ -1,5 +1,7 @@
+import '../../../../core/exceptions/validation_exception.dart';
 import '../entities/transaction.dart';
 import '../repository/i_transaction_repository.dart';
+import '../validators/new_transaction_validator.dart';
 
 class SaveTransactionUseCase {
   final ITransactionRepository _repository;
@@ -15,6 +17,18 @@ class SaveTransactionUseCase {
     String? observation,
     String? finalMonthYear,
   }) async {
+    final validationError = NewTransactionValidator.validate(
+      value: value,
+      categoryId: categoryId,
+      transactionDate: transactionDate,
+      isFixed: isFixed,
+      finalMonthYear: finalMonthYear,
+    );
+
+    if (validationError != null) {
+      throw ValidationException(validationError);
+    }
+
     final transaction = TransactionEntity.create(
       value: value,
       categoryId: categoryId,

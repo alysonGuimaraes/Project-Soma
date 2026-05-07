@@ -22,6 +22,7 @@ class TransactionDI {
       ProxyProvider<ITransactionRepository, SaveTransactionUseCase>(
         update: (_, repo, _) => SaveTransactionUseCase(repo),
       ),
+
       ProxyProvider<ITransactionRepository, GetTransactionsByMonthUseCase>(
         update: (_, repo, _) => GetTransactionsByMonthUseCase(repo),
       ),
@@ -35,6 +36,7 @@ class TransactionDI {
             TransactionFormController(save: SaveTransactionUseCase(repository)),
         update: (_, save, _) => TransactionFormController(save: save),
       ),
+
       ChangeNotifierProxyProvider<
         GetTransactionsByMonthUseCase,
         TransactionListController

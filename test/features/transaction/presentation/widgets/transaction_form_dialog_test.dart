@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:project_soma/core/widgets/components/app_switch_tile.dart';
-import 'package:project_soma/core/widgets/components/app_text_form_field.dart';
 import 'package:project_soma/features/transaction/presentation/controllers/transaction_form_controller.dart';
 import 'package:project_soma/features/transaction/presentation/widgets/transaction_form_dialog.dart';
 import 'package:provider/provider.dart';
@@ -15,17 +13,14 @@ void main() {
 
   setUp(() {
     mockController = MockTransactionFormController();
+
+    when(mockController.isSubmitting).thenReturn(false);
+    when(mockController.error).thenReturn(null);
+    when(mockController.success).thenReturn(false);
   });
 
-  Widget buildSubject({
-    bool isSubmitting = false,
-    String? error,
-    bool success = false,
-  }) {
-    when(mockController.isSubmitting).thenReturn(isSubmitting);
-    when(mockController.error).thenReturn(error);
+  Widget buildSubject({bool success = false}) {
     when(mockController.success).thenReturn(success);
-
     return MaterialApp(
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -33,9 +28,11 @@ void main() {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [Locale('pt', 'BR')],
-      home: ChangeNotifierProvider<TransactionFormController>.value(
-        value: mockController,
-        child: const Scaffold(body: TransactionFormDialog()),
+      home: Scaffold(
+        body: ChangeNotifierProvider<TransactionFormController>.value(
+          value: mockController,
+          child: const TransactionFormDialog(),
+        ),
       ),
     );
   }
@@ -59,17 +56,19 @@ void main() {
     testWidgets(
       'Deve exibir os campos de assinatura ao marcar como transação fixa',
       (tester) async {
+        await tester.binding.setSurfaceSize(const Size(1024, 900));
+        addTearDown(() => tester.binding.setSurfaceSize(null));
         await tester.pumpWidget(buildSubject());
 
-        final switchFinder = find.widgetWithText(
-          AppSwitchTile,
-          'É uma transação fixa?',
+        final fieldFinder = find.ancestor(
+          of: find.text('É uma transação fixa?'),
+          matching: find.byType(CheckboxListTile),
         );
 
-        await tester.ensureVisible(switchFinder);
-        expect(switchFinder, findsOneWidget);
+        await tester.ensureVisible(fieldFinder);
+        expect(fieldFinder, findsOneWidget);
 
-        await tester.tap(switchFinder);
+        await tester.tap(fieldFinder);
         await tester.pumpAndSettle();
 
         expect(find.text('Tempo indeterminado (Assinatura)'), findsOneWidget);
@@ -80,19 +79,21 @@ void main() {
     testWidgets(
       'Deve exibir o campo de Mes/Ano Final ao desmarcar Tempo Indeterminado',
       (tester) async {
+        await tester.binding.setSurfaceSize(const Size(1024, 900));
+        addTearDown(() => tester.binding.setSurfaceSize(null));
         await tester.pumpWidget(buildSubject());
 
-        final fixedSwitchFinder = find.widgetWithText(
-          AppSwitchTile,
-          'É uma transação fixa?',
+        final fixedCheckbox = find.ancestor(
+          of: find.text('É uma transação fixa?'),
+          matching: find.byType(CheckboxListTile),
         );
-        await tester.ensureVisible(fixedSwitchFinder);
-        await tester.tap(fixedSwitchFinder);
+        await tester.ensureVisible(fixedCheckbox);
+        await tester.tap(fixedCheckbox);
         await tester.pumpAndSettle();
 
-        final indefiniteSwitchFinder = find.widgetWithText(
-          CheckboxListTile,
-          'Tempo indeterminado (Assinatura)',
+        final indefiniteSwitchFinder = find.ancestor(
+          of: find.text('Tempo indeterminado (Assinatura)'),
+          matching: find.byType(CheckboxListTile),
         );
         await tester.ensureVisible(indefiniteSwitchFinder);
         await tester.tap(indefiniteSwitchFinder);
@@ -103,7 +104,7 @@ void main() {
     );
 
     testWidgets(
-      'Deve realizar o parsing correto dos dados e acionar controllers.save',
+      'Deve realizar o parsing correto dos dados e acionar formatters.save',
       (tester) async {
         when(
           mockController.save(
@@ -119,19 +120,19 @@ void main() {
 
         await tester.pumpWidget(buildSubject(success: true));
 
-        final valorField = find.widgetWithText(AppTextFormField, 'Valor (R\$)');
+        final valorField = find.widgetWithText(TextFormField, 'Valor (R\$)');
         await tester.ensureVisible(valorField);
         await tester.enterText(valorField, '2.500,75');
 
         final dataField = find.widgetWithText(
-          AppTextFormField,
+          TextFormField,
           'Data de transação',
         );
         await tester.ensureVisible(dataField);
         await tester.enterText(dataField, '20/12/2025');
 
         final obsField = find.widgetWithText(
-          AppTextFormField,
+          TextFormField,
           'Observação (Opcional)',
         );
         await tester.ensureVisible(obsField);
@@ -167,7 +168,7 @@ void main() {
     );
 
     testWidgets(
-      'Não deve chamar o controllers.save se o formulário for inválido',
+      'Não deve chamar o formatters.save se o formulário for inválido',
       (tester) async {
         await tester.pumpWidget(buildSubject());
 
