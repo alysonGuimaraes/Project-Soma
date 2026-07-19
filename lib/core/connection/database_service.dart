@@ -13,18 +13,14 @@ class DatabaseService {
   }
 
   Future<Database> _initDatabase() async {
-    // 1. Inicializa o FFI (Obrigatório para Desktop)
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       sqfliteFfiInit();
       databaseFactory = databaseFactoryFfi;
     }
 
-    // TODO: Revisitar a criação das tabelas e local salvamento para ajuste via configurações
-    // 2. Define onde o banco será salvo (ex: Documentos/Soma/soma.db)
     final directory = await getApplicationDocumentsDirectory();
     final dbPath = join(directory.path, 'Soma', 'soma.db');
 
-    // Cria a pasta "Soma" caso ela não exista
     final dbFolder = Directory(dirname(dbPath));
     if (!await dbFolder.exists()) {
       await dbFolder.create(recursive: true);
@@ -37,7 +33,6 @@ class DatabaseService {
     );
   }
 
-  // TODO: Revisitar criação das tabelas
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS Categories (

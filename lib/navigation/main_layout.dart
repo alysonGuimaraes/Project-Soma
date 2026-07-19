@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../features/dashboard/presentation/pages/dashboard_page.dart';
-import '../features/transaction/presentation/pages/transactions_page.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -15,7 +14,7 @@ class _MainLayoutState extends State<MainLayout> {
 
   final List<Widget> _pages = [
     const DashboardPage(),
-    const TransactionsPage(),
+    const Center(child: Text('Tela de Movimentações')),
     const Center(child: Text('Tela de Categorias')),
     const Center(child: Text('Tela de Configurações')),
   ];

@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../../transaction/presentation/controllers/transaction_form_controller.dart';
-import '../../../transaction/presentation/widgets/transaction_form_dialog.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -30,14 +26,7 @@ class DashboardPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => showDialog(
-          context: context,
-          builder: (dialogContext) => ChangeNotifierProvider.value(
-            // Passa o formatters já existente para dentro do dialog
-            value: context.read<TransactionFormController>(),
-            child: const TransactionFormDialog(),
-          ),
-        ),
+        onPressed: () => Dialog(),
         icon: const Icon(Icons.add),
         label: const Text('Nova Transação'),
       ),
