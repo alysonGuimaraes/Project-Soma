@@ -43,7 +43,7 @@ class _MainLayoutState extends State<MainLayout> {
               NavigationRailDestination(
                 icon: Icon(Icons.featured_play_list_outlined),
                 selectedIcon: Icon(Icons.featured_play_list),
-                label: Text('Transações'),
+                label: Text('Movimentações'),
               ),
               NavigationRailDestination(
                 icon: Icon(Icons.category_outlined),
