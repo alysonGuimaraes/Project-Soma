@@ -13,8 +13,8 @@ class CategoryEntity {
     required this.id,
     required this.type,
     required this.name,
-    this.colorHex,
-    this.iconCode,
+    required this.colorHex,
+    required this.iconCode,
     required this.createdAt,
     required this.updatedAt,
   });

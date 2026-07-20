@@ -7,9 +7,10 @@ class RecurrenceEntity {
   final FrequencyType frequency;
   final DateTime recurrencyInitDate;
   final bool isActive;
-  final int? qtdOccurrence;
   final DateTime createdAt;
   final DateTime updatedAt;
+
+  final int? qtdOccurrence;
 
   RecurrenceEntity({
     required this.id,
