@@ -14,26 +14,24 @@ class CategoryModel extends CategoryEntity {
   factory CategoryModel.fromMap(Map<String, dynamic> map) {
     return CategoryModel(
       id: map['id'],
-      type: TransactionType.values.firstWhere((e) => e.name == map['tipo']),
+      type: TransactionType.values.firstWhere((e) => e.name == map['type']),
       name: map['name'],
+      colorHex: map['colorHex'],
+      iconCode: map['iconCode'],
       createdAt: DateTime.parse(map['createdAt']),
       updatedAt: DateTime.parse(map['updatedAt']),
-
-      colorHex: map['corHexadecimal'],
-      iconCode: map['iconeId'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'tipo': type.name,
+      'type': type.name,
       'name': name,
+      'colorHex': colorHex,
+      'iconCode': iconCode,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
-
-      'corHexadecimal': colorHex,
-      'iconeId': iconCode,
     };
   }
 }

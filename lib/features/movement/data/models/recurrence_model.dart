@@ -23,7 +23,7 @@ class RecurrenceModel extends RecurrenceEntity {
         (e) => e.name == map['frequency'],
       ),
       recurrencyInitDate: DateTime.parse(map['recurrencyInitDate']),
-      isActive: map['isActive'],
+      isActive: map['isActive'] == 1,
       createdAt: DateTime.parse(map['createdAt']),
       updatedAt: DateTime.parse(map['updatedAt']),
 
@@ -38,7 +38,7 @@ class RecurrenceModel extends RecurrenceEntity {
       'value': value,
       'frequency': frequency.name,
       'recurrencyInitDate': recurrencyInitDate.toIso8601String(),
-      'isActive': isActive,
+      'isActive': isActive ? 1 : 0,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
 

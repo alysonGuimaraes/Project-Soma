@@ -18,7 +18,7 @@ class MovementModel extends MovementEntity {
       id: map['id'],
       categoryId: map['categoryId'],
       value: (map['value'] as num).toDouble(),
-      movementDate: map['movementDate'],
+      movementDate: DateTime.parse(map['movementDate']),
       createdAt: DateTime.parse(map['createdAt']),
       updatedAt: DateTime.parse(map['updatedAt']),
 
