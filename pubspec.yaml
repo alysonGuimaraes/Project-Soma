@@ -20,6 +20,7 @@ dependencies:
   flutter_masked_text2: ^0.9.1
   intl: ^0.20.2
   provider: ^6.1.5+1
+  sqflite_sqlcipher: ^3.4.0
 
 
 dev_dependencies:
