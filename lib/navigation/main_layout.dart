@@ -24,7 +24,6 @@ class _MainLayoutState extends State<MainLayout> {
     return Scaffold(
       body: Row(
         children: [
-          // Menu Lateral
           NavigationRail(
             selectedIndex: _selectedIndex,
             onDestinationSelected: (int index) {
@@ -32,8 +31,8 @@ class _MainLayoutState extends State<MainLayout> {
                 _selectedIndex = index;
               });
             },
-            extended: true, // Se true, mostra os textos. Se false, só ícones.
-            minExtendedWidth: 200, // Largura do menu
+            extended: true,
+            minExtendedWidth: 200,
             destinations: const [
               NavigationRailDestination(
                 icon: Icon(Icons.dashboard_outlined),

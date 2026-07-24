@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:project_soma/core/di/container/injection_container.dart';
 
 import 'navigation/main_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await setupDependencies();
 
   runApp(MyApp());
 }

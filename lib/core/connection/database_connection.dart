@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart' hide databaseFactory;
+import 'package:sqflite_common_ffi/sqflite_ffi.dart' as ffi;
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
 class DatabaseConnection {
@@ -23,12 +23,12 @@ class DatabaseConnection {
     }
 
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      sqfliteFfiInit();
-      final factoryFfi = databaseFactoryFfi;
+      ffi.sqfliteFfiInit();
+      final factoryFfi = ffi.databaseFactoryFfi;
 
       return await factoryFfi.openDatabase(
         dbPath,
-        options: OpenDatabaseOptions(version: 1, onCreate: _onCreate),
+        options: ffi.OpenDatabaseOptions(version: 1, onCreate: _onCreate),
       );
     } else {
       return await openDatabase(
