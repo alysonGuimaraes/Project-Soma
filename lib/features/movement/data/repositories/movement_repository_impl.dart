@@ -3,7 +3,7 @@ import 'package:project_soma/features/movement/domain/repositories/i_movement_re
 
 import '../../../../core/connection/database_connection.dart';
 
-class MovementRepositoryImpl extends IMovementRepository {
+class MovementRepositoryImpl implements IMovementRepository {
   final DatabaseConnection databaseConnection;
 
   MovementRepositoryImpl(this.databaseConnection);

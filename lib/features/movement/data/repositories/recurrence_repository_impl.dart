@@ -2,7 +2,7 @@ import 'package:project_soma/core/connection/database_connection.dart';
 import 'package:project_soma/features/movement/domain/entities/recurrence_entity.dart';
 import 'package:project_soma/features/movement/domain/repositories/i_recurrence_repository.dart';
 
-class RecurrenceRepositoryImpl extends IRecurrenceRepository {
+class RecurrenceRepositoryImpl implements IRecurrenceRepository {
   final DatabaseConnection databaseConnection;
 
   RecurrenceRepositoryImpl(this.databaseConnection);

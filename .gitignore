@@ -46,3 +46,6 @@ app.*.map.json
 
 # Just local documentation
 /docs
+
+# Preferences file
+preferences.json
